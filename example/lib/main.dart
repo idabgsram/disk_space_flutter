@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:disk_space/disk_space.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -27,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> initDiskSpace() async {
     double diskSpace = 0;
 
-    diskSpace = await DiskSpace.getFreeDiskSpace;
+    diskSpace = await DiskSpace.getFreeDiskSpace??0;
 
     List<Directory> directories;
     Map<Directory, double> directorySpace = {};
@@ -41,12 +40,12 @@ class _MyAppState extends State<MyApp> {
         (list) async => list ?? [await getApplicationDocumentsDirectory()],
       );
     } else {
-      return [];
+      return ;
     }
 
     for (var directory in directories) {
       var space = await DiskSpace.getFreeDiskSpaceForPath(directory.path);
-      directorySpace.addEntries([MapEntry(directory, space)]);
+      directorySpace.addEntries([MapEntry(directory, space??0)]);
     }
 
     if (!mounted) return;
